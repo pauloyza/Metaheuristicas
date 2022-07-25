@@ -21,20 +21,28 @@ def grasp(max_interactions):
     #making a array with the cities, we have to drop after each interaction
     city_all = len(matriz[0])
     cities = np.arange(1, city_all+1) # an array like [1,2,3, ... , last city]
+    city_begin_arrays = np.array([])
     #print(city_all)
     for i in range(max_interactions):
         #Start the construct method
 
-        #a) chose a random start city (it's the position into the array 'cities')
-        x = rd.randint(0, city_all-1)
-        #b) making a aux array which will be useful to dont repeat the chosen cities
+        #a) chose a random start possible city
+        while (1):
+            city_begin = rd.randint(1, city_all)
+            if not (np.any(city_begin_arrays == city_begin)):
+                break
+        #b) feeding the array
+        city_begin_arrays = np.append(city_begin_arrays, np.asarray(city_begin))
         
         #cities_aux = np.delete(np.arange(1, city_all+1), x)
-        cities_aux = matriz[x]
-
-        #c) choosing a way better with a for
+        #cities_aux = matriz[x]
+        
+        #c) making the first rote
         distance = 0
-        better_solution = np.array([x+1])
+        better_solution = np.array(np.asarray(city_begin))
+        better_solution, distance = contruct_guloso(city_begin)
+        #c) choosing a way better with a for
+        
         #print(better_solution)
         for i in range(len(cities_aux)):
             
@@ -45,11 +53,13 @@ def grasp(max_interactions):
             better_solution = np.append(better_solution, [cities_aux[index__next_city]])
 
             cities_aux = np.delete(cities_aux, index__next_city)
-            print("Se a cidade inicial eh: ", x+1, ", entao a melhor rota eh: ", better_solution)                
+            #print("Se a cidade inicial eh: ", x+1, ", entao a melhor rota eh: ", better_solution)                
 
-        print("Se a cidade inicial eh: ", x+1, ", entao a melhor rota eh: ", better_solution)            
+        #print("Se a cidade inicial eh: ", x+1, ", entao a melhor rota eh: ", better_solution)            
 
-
+def construct_guloso(city_begin):
+    
+    return better_solution, distance
 
 
 
