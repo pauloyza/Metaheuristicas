@@ -15,14 +15,20 @@ matriz = np.loadtxt('five_d.txt')
 
 #(2)
 max_interactions = 5
-print(matriz)
+matriz[matriz == 0] = np.nan
 def grasp(max_interactions):
     #making a array with the cities, we have to drop after each interaction
     global city_all 
+    global real_best_solution
+    global wall_hacker
     city_all = len(matriz[0])
     cities = np.arange(0, city_all) # an array like [1,2,3, ... , last city]
     city_begin_arrays = np.array([])
-    #print(city_all)
+    real_best_solution = np.array([])
+    wall_hacker= np.argsort(matriz)
+
+
+    #Finding the "best" solution only with the greedy method
     for i in range(max_interactions):
         #Start the construct method
 
@@ -41,29 +47,39 @@ def grasp(max_interactions):
         better_distance = 0
         distance = 0
         better_solution = np.array(np.asarray([city_begin]))
-
-        global wall_hacker 
-        wall_hacker= np.argsort(matriz)
-
         better_solution, distance = constructGuloso(better_solution, distance, better_distance)
-        print(distance, " e o camminho:", better_solution)
-                  
+        
+        print("distancia:", distance, " best solution:", better_solution)
+        #Saving the best solution if it's true
+        if ( (better_distance == 0) | (distance < better_distance) ):
+            better_distance = distance
+            real_best_solution = better_solution
+              
 
 def constructGuloso(better_solution, distance, better_distance, bias = 0, alpha = 1):
     #bias 0 -> guloso normal
-    #bias 1 -> local search complete
-    #bias 2 -> local search with conditions
+    #bias 1 -> local search random
+    #bias 2 -> local search 
     while ( len(better_solution) < city_all ):
         #print(better_solution)
         if(bias == 0):
-            for i in range(city_all):
-                    next = matriz[better_solution[-1]][i]
-                    if not ( np.any(better_solution == i) ):
+            for ii in range(city_all):
+                    for j in wall_hacker[better_solution[-1]]:
+                        if not ( np.any(better_solution == j) ):
+                            better_solution = np.append(better_solution, j)
+            solution_aux = np.append(better_solution, better_solution[0])    
                         
-                        distance += next
-                        better_solution = np.append(better_solution, np.asarray(i))
+            for ii in range(len(better_solution)):
+                distance += matriz[solution_aux[ii]][solution_aux[ii+1]]            
 
-            distance += matriz[better_solution[-1]][better_solution[0]]
+            
+        else:
+            break#mudar isso
+    
+    if((bias == 1) | (bias == 2)):
+        #case final, the last one
+        if (city_all - len(better_solution) == 1):
+            print("oi")
             
 
     return better_solution, distance
