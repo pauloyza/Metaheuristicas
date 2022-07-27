@@ -15,12 +15,12 @@ matriz = np.loadtxt('five_d.txt')
 
 #(2)
 max_interactions = 5
-alpha = 0.2
 print(matriz)
 def grasp(max_interactions):
     #making a array with the cities, we have to drop after each interaction
+    global city_all 
     city_all = len(matriz[0])
-    cities = np.arange(1, city_all+1) # an array like [1,2,3, ... , last city]
+    cities = np.arange(0, city_all) # an array like [1,2,3, ... , last city]
     city_begin_arrays = np.array([])
     #print(city_all)
     for i in range(max_interactions):
@@ -28,7 +28,7 @@ def grasp(max_interactions):
 
         #a) chose a random start possible city
         while (1):
-            city_begin = rd.randint(1, city_all)
+            city_begin = rd.randint(0, city_all-1)
             if not (np.any(city_begin_arrays == city_begin)):
                 break
         #b) feeding the array
@@ -38,29 +38,37 @@ def grasp(max_interactions):
         #cities_aux = matriz[x]
         
         #c) making the first rote
+        better_distance = 0
         distance = 0
-        better_solution = np.array(np.asarray(city_begin))
-        better_solution, distance = contruct_guloso(city_begin)
-        #c) choosing a way better with a for
-        
+        better_solution = np.array(np.asarray([city_begin]))
+
+        global wall_hacker 
+        wall_hacker= np.argsort(matriz)
+
+        better_solution, distance = constructGuloso(better_solution, distance, better_distance)
+        print(distance, " e o camminho:", better_solution)
+                  
+
+def constructGuloso(better_solution, distance, better_distance, bias = 0, alpha = 1):
+    #bias 0 -> guloso normal
+    #bias 1 -> local search complete
+    #bias 2 -> local search with conditions
+    while ( len(better_solution) < city_all ):
         #print(better_solution)
-        for i in range(len(cities_aux)):
+        if(bias == 0):
+            for i in range(city_all):
+                    next = matriz[better_solution[-1]][i]
+                    if not ( np.any(better_solution == i) ):
+                        
+                        distance += next
+                        better_solution = np.append(better_solution, np.asarray(i))
+
+            distance += matriz[better_solution[-1]][better_solution[0]]
             
-            #next_city = np.amin(np.delete(cities_aux, np.where(cities_aux == 0))) #find the city next to (it's the distance)
-            next_city = np.amin(np.array(cities_aux)[cities_aux != np.amin(cities_aux)]) #find the city next to (it's the distance)
-            distance = distance + next_city #incrementa a distancia
-            index__next_city = np.where(cities_aux == next_city)
-            better_solution = np.append(better_solution, [cities_aux[index__next_city]])
 
-            cities_aux = np.delete(cities_aux, index__next_city)
-            #print("Se a cidade inicial eh: ", x+1, ", entao a melhor rota eh: ", better_solution)                
-
-        #print("Se a cidade inicial eh: ", x+1, ", entao a melhor rota eh: ", better_solution)            
-
-def construct_guloso(city_begin):
-    
     return better_solution, distance
 
 
 
 grasp(max_interactions)
+print(matriz)
