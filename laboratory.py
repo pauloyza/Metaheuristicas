@@ -31,9 +31,9 @@ vector_aux = np.append(vector, vector[0])
 for i in range(len(vector)):
     distance += matriz[vector_aux[i]][vector_aux[i+1]]
 
-print("distancia: ",distance)
-print(vector)
-print(matriz)            
+#print("distancia: ",distance)
+#print(vector)
+#print(matriz)            
 #x = np.arange(24).reshape((2, 3, 4))
 #print(x)
 #print(np.argm()))
@@ -43,11 +43,13 @@ print(matriz)
 #cities = np.arange(0, city_all)
 #print(cities)
 
-array_uai = np.arange(1,5)
-array_normal = np.arange(1,6)
-#print(array_uai)
-#print(array_normal)
-
+array_uai = np.asarray([2,4,3])
+array_normal = np.asarray([0,1,2,3,4])
+print(array_uai)
+print(array_normal)
+print(np.in1d( array_normal, array_uai) )
+last_city = np.argwhere( (np.in1d( array_normal, array_uai )) == False )
+print("aqui ",rd.randint(0,1))
 array_bool = np.in1d(array_normal, array_uai)
 #print(array_bool)
 #print(np.argwhere(array_bool == False))
@@ -57,3 +59,5 @@ array_uai[-1]
 
 asa = np.array([[]])
 #print(type(asa))
+
+#alet = rd.randint()
