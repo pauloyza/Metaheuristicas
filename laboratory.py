@@ -12,10 +12,28 @@ print(type(c))
 sabedor = np.any(a == 10)
 print(sabedor)
 matriz = np.loadtxt('five_d.txt') 
-#print(matriz)
+matriz[matriz == 0] = np.nan
+print(matriz)
 matriz[matriz == 0] = np.nan    
-#print(matriz)
-#print(np.argsort(matriz))
+print(matriz)
+wall_hacker = np.argsort(matriz)
+print(wall_hacker)
+
+x=3
+distance = 0
+vector = np.asarray([x])
+print(vector[-1])
+for i in range(5):
+    for j in wall_hacker[vector[-1]]:
+        if not(np.any(vector == j)):
+            vector = np.append(vector, j)
+vector_aux = np.append(vector, vector[0])
+for i in range(len(vector)):
+    distance += matriz[vector_aux[i]][vector_aux[i+1]]
+
+print("distancia: ",distance)
+print(vector)
+print(matriz)            
 #x = np.arange(24).reshape((2, 3, 4))
 #print(x)
 #print(np.argm()))
@@ -27,12 +45,15 @@ matriz[matriz == 0] = np.nan
 
 array_uai = np.arange(1,5)
 array_normal = np.arange(1,6)
-print(array_uai)
-print(array_normal)
+#print(array_uai)
+#print(array_normal)
 
 array_bool = np.in1d(array_normal, array_uai)
-print(array_bool)
-print(np.argwhere(array_bool == False))
+#print(array_bool)
+#print(np.argwhere(array_bool == False))
 array_uai[-1]
 
-print(np.any(array_uai == 3))
+#print(np.any(array_uai == 3))
+
+asa = np.array([[]])
+#print(type(asa))
